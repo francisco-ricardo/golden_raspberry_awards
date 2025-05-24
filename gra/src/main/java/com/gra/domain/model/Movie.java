@@ -10,7 +10,10 @@ public class Movie {
     private Long id;
 
     private String title;
+
+    @Column(name = "release_year")
     private Integer year;
+    
     private String producers;
     private boolean winner;
 
