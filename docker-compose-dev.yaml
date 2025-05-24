@@ -1,0 +1,19 @@
+services:
+
+  gra.dev:
+    container_name: gra.dev
+    image: gra.dev:latest
+    restart: "no"
+    build: 
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
+    env_file:
+      - .env.dev
+    ports:
+      - "8080:8080"
+      
+
+

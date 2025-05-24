@@ -1,0 +1,15 @@
+
+.vscode/
+.vstags
+
+*.log
+*~
+.#*
+~*
+
+*.class
+
+tmp/
+logs/
+target/
+**/target/
