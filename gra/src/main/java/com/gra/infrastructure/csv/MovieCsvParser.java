@@ -17,9 +17,7 @@ import java.util.List;
 public class MovieCsvParser {
 
 
-    public MovieCsvParser() {
-        // Default constructor
-    }
+    public MovieCsvParser() {}
 
     public List<Movie> parseFromReader(Reader source) throws IOException {
 
