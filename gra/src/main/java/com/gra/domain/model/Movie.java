@@ -13,7 +13,7 @@ public class Movie {
 
     @Column(name = "release_year")
     private Integer year;
-    
+
     private String producers;
     private boolean winner;
 
@@ -28,5 +28,28 @@ public class Movie {
         this.winner = winner;
     }
 
-    // Getters and setters omitted for brevity
+    // Getters and setters
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public Integer getYear() {
+        return this.year;
+    }
+
+    public String getProducers() {
+        return this.producers;
+    }
+
+    public boolean isWinner() {
+        return this.winner;
+    }   
+
+
+
 }
