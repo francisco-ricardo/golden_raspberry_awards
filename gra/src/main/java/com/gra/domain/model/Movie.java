@@ -17,7 +17,7 @@ public class Movie {
     private String producers;
     private boolean winner;
 
-    // Constructors, getters, setters
+    // Constructors
 
     public Movie() {}
 
@@ -28,7 +28,7 @@ public class Movie {
         this.winner = winner;
     }
 
-    // Getters and setters
+    // Getters
 
     public Long getId() {
         return this.id;
@@ -48,8 +48,6 @@ public class Movie {
 
     public boolean isWinner() {
         return this.winner;
-    }   
-
-
+    }
 
 }

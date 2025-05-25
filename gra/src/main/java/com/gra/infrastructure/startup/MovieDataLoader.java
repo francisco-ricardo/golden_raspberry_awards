@@ -3,9 +3,12 @@ package com.gra.infrastructure.startup;
 import com.gra.domain.model.Movie;
 import com.gra.domain.repository.MovieRepository;
 import com.gra.infrastructure.csv.MovieCsvParser;
-import jakarta.annotation.PostConstruct;
+
+import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
@@ -18,24 +21,18 @@ public class MovieDataLoader {
 
     private static final Logger LOG = Logger.getLogger(MovieDataLoader.class);
 
-    //private final MovieRepository movieRepository;
-    //private final MovieCsvParser movieCsvParser;
+    private final MovieRepository movieRepository;
+    private final MovieCsvParser movieCsvParser;
 
     @Inject
-    MovieRepository movieRepository;
+    public MovieDataLoader(MovieRepository movieRepository, MovieCsvParser movieCsvParser) {
+        this.movieRepository = movieRepository;
+        this.movieCsvParser = movieCsvParser;
+        LOG.info("MovieDataLoader initialized");
+    }
 
-    @Inject
-    MovieCsvParser movieCsvParser;
-
-
-    //@Inject
-    //public MovieDataLoader(MovieRepository movieRepository, MovieCsvParser movieCsvParser) {
-        //this.movieRepository = movieRepository;
-        //this.movieCsvParser = movieCsvParser;
-    //}
-
-    @PostConstruct
-    void loadData() {
+    @Transactional
+    void onStart(@Observes StartupEvent ev) {
         LOG.info("Loading movies from CSV file...");
         try (Reader reader = new InputStreamReader(
                 getClass().getClassLoader().getResourceAsStream("data/movies.csv"))) {
@@ -48,6 +45,8 @@ public class MovieDataLoader {
             LOG.infof("Total movies loaded: %d", movies.size());
         } catch (Exception e) {
             LOG.error("Failed to load movies from CSV", e);
+            throw new RuntimeException("Failed to load movies from CSV", e);
         }
     }
+    
 }

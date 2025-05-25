@@ -4,6 +4,7 @@ import com.gra.domain.model.Movie;
 import com.gra.domain.repository.MovieRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class MovieRepositoryImpl implements MovieRepository, PanacheRepository<M
     }
 
     @Override
+    @Transactional
     public void save(Movie movie) {
         persist(movie);
     }
