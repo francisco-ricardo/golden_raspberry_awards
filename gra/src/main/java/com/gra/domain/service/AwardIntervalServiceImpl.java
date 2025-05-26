@@ -4,6 +4,7 @@ import com.gra.domain.model.AwardInterval;
 import com.gra.domain.repository.AwardRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -15,12 +16,17 @@ import java.util.Map;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
-@RequiredArgsConstructor
 public class AwardIntervalServiceImpl implements AwardIntervalService {
 
     private static final Logger LOG = Logger.getLogger(AwardIntervalServiceImpl.class);
 
     private final AwardRepository awardRepository;
+
+    @Inject
+    public AwardIntervalServiceImpl(AwardRepository awardRepository) {
+        this.awardRepository = awardRepository;
+    }
+
 
     @Override
     public List<AwardInterval> findMinIntervals() {

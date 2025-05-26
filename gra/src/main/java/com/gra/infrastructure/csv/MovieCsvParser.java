@@ -39,10 +39,11 @@ public class MovieCsvParser {
     }
 
     private Movie recordToMovie(CSVRecord entry) {
-        String titleField = entry.get("title");
-        int yearField = Integer.parseInt(entry.get("year"));
-        String producersField = entry.get("producers");
-        boolean winnerField = "yes".equalsIgnoreCase(entry.get("winner"));
-        return new Movie(titleField, yearField, producersField, winnerField);
+        final String titleField = entry.get("title");
+        final int yearField = Integer.parseInt(entry.get("year"));
+        final String producersField = entry.get("producers");
+        final String studioField = entry.get("studios");
+        final boolean winnerField = "yes".equalsIgnoreCase(entry.get("winner"));
+        return new Movie(titleField, yearField, producersField, studioField, winnerField);
     }
 }

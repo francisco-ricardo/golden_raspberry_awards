@@ -10,6 +10,8 @@ public interface MovieRepository {
 
     List<Movie> listAllMovies();
 
+    List<Movie> findAllWinnerMovies();
+
     void save(Movie movie);
     
 }

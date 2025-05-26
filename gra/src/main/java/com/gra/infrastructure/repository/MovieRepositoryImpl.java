@@ -23,8 +23,14 @@ public class MovieRepositoryImpl implements MovieRepository, PanacheRepository<M
     }
 
     @Override
+    public List<Movie> findAllWinnerMovies() {
+        return find("winner", true).list();
+    }    
+
+    @Override
     @Transactional
     public void save(Movie movie) {
         persist(movie);
     }
+
 }
