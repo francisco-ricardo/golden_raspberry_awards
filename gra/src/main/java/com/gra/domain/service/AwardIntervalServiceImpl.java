@@ -2,9 +2,7 @@ package com.gra.domain.service;
 
 import com.gra.domain.model.AwardInterval;
 import com.gra.domain.repository.AwardRepository;
-import com.gra.infrastructure.repository.AwardRepositoryImpl;
 
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -59,8 +57,9 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
     interval: 1                                      interval: 80
 
     */
-    private Map<String, List<AwardInterval>> calculateIntervals2() {
+    private Map<String, List<AwardInterval>> calculateIntervals() {
 
+        
         
         final Map<String, List<Integer>> producerWins = awardRepository.findAllProducerWins();
         final int slidingWindow = 1;
@@ -70,6 +69,9 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
         for (Map.Entry<String, List<Integer>> entry : producerWins.entrySet()) {
             final String producer = entry.getKey();
             final List<Integer> years = entry.getValue();
+
+            LOG.infof("Checking - Producer: %s, Years: %s", producer, years);
+
 
             if (years.size() < slidingWindow + 1) {
                 LOG.infof("Producer %s has less than %d wins, skipping.", producer, slidingWindow + 1);
@@ -98,34 +100,81 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
         }
 
         final Map<String, List<AwardInterval>> result = new HashMap<>();
-        final List<AwardInterval> awardIntervals = new ArrayList<>();
+        final List<AwardInterval> awardMinIntervals = new ArrayList<>();
+        final List<AwardInterval> awardMaxIntervals = new ArrayList<>();
         // TODO: VALIDATE EMPTY LIST
         if (awardIntervalTemp.isEmpty()) {
             LOG.warn("No award intervals found.");
             return result;
         }
         
+
+        // SE HOUVER SOMENTE UM INTERVALO, ELE É O MÍNIMO E MÁXIMO
+
+        // Find the minimum AwardInterval
         if (awardIntervalTemp.size() == 1) {
-            awardIntervals.add(awardIntervalTemp.get(0)); // Add the first interval    
+            awardMinIntervals.add(awardIntervalTemp.get(0)); // Add the first interval    
         } else {
             // Add the first interval
-            awardIntervals.add(awardIntervalTemp.get(0));
+            awardMinIntervals.add(awardIntervalTemp.get(0));
             // Make sure to add the all intervals that are equal to the first one
             for (int i = 1; i < awardIntervalTemp.size(); i++) {
                 if (awardIntervalTemp.get(i).getInterval() == awardIntervalTemp.get(0).getInterval()) {
-                    awardIntervals.add(awardIntervalTemp.get(i));
+                    awardMinIntervals.add(awardIntervalTemp.get(i));
                 } else {
                     break; // Stop when we find a different interval
                 }
             }
-
         }
+
+        // Find the maximum AwardInterval
+        final int lastIndex = awardIntervalTemp.size() - 1;
+        if (awardIntervalTemp.size() == 1) {
+            awardMaxIntervals.add(awardIntervalTemp.get(lastIndex)); // Add the last interval    
+        } else {
+            // Add the first interval
+            awardMaxIntervals.add(awardIntervalTemp.get(lastIndex));
+            // Make sure to add the all intervals that are equal to the last one
+            for (int i = lastIndex - 1; i >= 0; i--) {
+                if (awardIntervalTemp.get(i).getInterval() == awardIntervalTemp.get(lastIndex).getInterval()) {
+                    awardMaxIntervals.add(awardIntervalTemp.get(i));
+                } else {
+                    break; // Stop when we find a different interval
+                }
+            }
+        }
+
         
-        for (AwardInterval ai : awardIntervals) {
-            LOG.infof("[FINAL] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-        }
+        // for (AwardInterval ai : awardMinIntervals) {
+        //     LOG.infof("[MIN] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+        //             ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
+        // }
 
+
+        result.put("min", awardMinIntervals);
+        // for (Map.Entry<String, List<AwardInterval>> entry: result.entrySet()) {
+        //     final String key = entry.getKey();
+        //     final List<AwardInterval> values = entry.getValue();
+        //     for (AwardInterval ai: values) {
+        //         LOG.infof("Type: %s, Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+        //             key, ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
+        //     }
+            
+        // }
+
+        result.put("max", awardMaxIntervals);
+
+        LOG.info("Testing new method");
+
+        for (Map.Entry<String, List<AwardInterval>> entry: result.entrySet()) {
+            final String key = entry.getKey();
+            final List<AwardInterval> values = entry.getValue();
+            for (AwardInterval ai: values) {
+                LOG.infof("Type: %s, Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+                    key, ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
+            }
+            
+        }
 
         return result;
 
@@ -134,7 +183,7 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
 
 
 
-    private Map<String, List<AwardInterval>> calculateIntervals() {
+    private Map<String, List<AwardInterval>> calculateIntervalsOrig() {
         
         List<AwardInterval> allIntervals = new ArrayList<>();
         Map<String, List<Integer>> producerWins = awardRepository.findAllProducerWins();
@@ -158,10 +207,6 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
             if (ai.getInterval() == min) minList.add(ai);
             if (ai.getInterval() == max) maxList.add(ai);
         }
-
-        LOG.info("Testing new method");
-        calculateIntervals2();
-
 
         Map<String, List<AwardInterval>> result = new HashMap<>();
         result.put("min", minList);

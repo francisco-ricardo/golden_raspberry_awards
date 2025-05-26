@@ -35,7 +35,7 @@ public class MovieDataLoader {
     void onStart(@Observes StartupEvent ev) {
         LOG.info("Loading movies from CSV file...");
         try (Reader reader = new InputStreamReader(
-                getClass().getClassLoader().getResourceAsStream("data/movies.csv"))) {
+                getClass().getClassLoader().getResourceAsStream("data/movielist.csv"))) {
             List<Movie> movies = movieCsvParser.parseFromReader(reader);
             for (Movie movie : movies) {
                 movieRepository.save(movie);

@@ -48,6 +48,7 @@ public class AwardRepositoryImpl implements AwardRepository {
         }
 
         // Sort years for each producer
+        // TODO: VERIFICAR POSSIBILIDADE DE REMOVER A ORDENACAO DAQUI E MANTER SOMENTE NO SERVICE
         for (List<Integer> years : producerWins.values()) {
             Collections.sort(years);
         }
