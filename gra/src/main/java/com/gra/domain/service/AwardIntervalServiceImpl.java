@@ -61,9 +61,11 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
     */
     private Map<String, List<AwardInterval>> calculateIntervals2() {
 
-        final Map<String, List<AwardInterval>> result = new HashMap<>();
+        
         final Map<String, List<Integer>> producerWins = awardRepository.findAllProducerWins();
         final int slidingWindow = 1;
+
+        final List<AwardInterval> awardIntervalTemp= new ArrayList<>();
 
         for (Map.Entry<String, List<Integer>> entry : producerWins.entrySet()) {
             final String producer = entry.getKey();
@@ -74,19 +76,54 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
                 continue;
             }
 
-            final List<AwardInterval> intervals = new ArrayList<>();
             for (int i = 0; i < years.size() - slidingWindow; i++) {
                 final int interval = years.get(i + slidingWindow) - years.get(i);
                 final int previousWin = years.get(i);
-                final int followingWin = years.get(i + slidingWindow);
-                LOG.infof("Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-                    producer, interval, previousWin, followingWin);
-                intervals.add(new AwardInterval(producer, interval, previousWin, followingWin));
+                final int followingWin = years.get(i + slidingWindow);            
+                awardIntervalTemp.add(new AwardInterval(producer, interval, previousWin, followingWin));
+            }
+        }
+
+        for (AwardInterval ai : awardIntervalTemp) {
+            LOG.infof("[UNSORTED] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
+        }
+
+        // Sort intervals by interval
+        Collections.sort(awardIntervalTemp, (a1, a2) -> Integer.compare(a1.getInterval(), a2.getInterval()));        
+
+        for (AwardInterval ai : awardIntervalTemp) {
+            LOG.infof("[SORTED] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
+        }
+
+        final Map<String, List<AwardInterval>> result = new HashMap<>();
+        final List<AwardInterval> awardIntervals = new ArrayList<>();
+        // TODO: VALIDATE EMPTY LIST
+        if (awardIntervalTemp.isEmpty()) {
+            LOG.warn("No award intervals found.");
+            return result;
+        }
+        
+        if (awardIntervalTemp.size() == 1) {
+            awardIntervals.add(awardIntervalTemp.get(0)); // Add the first interval    
+        } else {
+            // Add the first interval
+            awardIntervals.add(awardIntervalTemp.get(0));
+            // Make sure to add the all intervals that are equal to the first one
+            for (int i = 1; i < awardIntervalTemp.size(); i++) {
+                if (awardIntervalTemp.get(i).getInterval() == awardIntervalTemp.get(0).getInterval()) {
+                    awardIntervals.add(awardIntervalTemp.get(i));
+                } else {
+                    break; // Stop when we find a different interval
+                }
             }
 
-            if (!intervals.isEmpty()) {
-                result.put(producer, intervals);
-            }
+        }
+        
+        for (AwardInterval ai : awardIntervals) {
+            LOG.infof("[FINAL] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
+                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
         }
 
 
