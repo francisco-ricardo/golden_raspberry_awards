@@ -6,9 +6,20 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.*;
 
+/**
+ * Classe de teste para o recurso MovieResource.
+ * Testa os endpoints relacionados aos filmes.
+ * Verifica se o endpoint /movies retorna a lista de filmes corretamente.
+ */
 @QuarkusTest
 public class MovieResourceTest {
+    
 
+    /**
+     * Testa o endpoint /movies para garantir que retorna a lista de filmes.
+     * Verifica se o status da resposta e 200 e se a lista nao esta vazia.
+     * Verifica tambem se os campos id, title, year, producers e winner estao presentes.
+     */
     @Test
     public void testGetAllMovies() {
         RestAssured.given()
@@ -23,12 +34,4 @@ public class MovieResourceTest {
             .body("[0].winner", notNullValue());
     }
 
-    // @Test
-    // public void testGetMovieById() {
-    //     // Assumes a movie with ID 1 exists in your test dataset
-    //     RestAssured.given()
-    //         .when().get("/movies/1")
-    //         .then()
-    //         .statusCode(anyOf(is(200), is(404))); // 200 if exists, 404 if not
-    // }
 }

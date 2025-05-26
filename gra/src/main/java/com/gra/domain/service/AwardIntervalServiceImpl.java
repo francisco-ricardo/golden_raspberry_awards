@@ -5,7 +5,6 @@ import com.gra.domain.repository.AwardRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +14,12 @@ import java.util.Map;
 
 import org.jboss.logging.Logger;
 
+
+/**
+ * Service para calcular os intervalos de premios entre os anos em que os produtores ganharam.
+ * Ele calcula os intervalos minimos e maximos entre os premios ganhos por cada produtor.
+ * Os intervalos sao calculados considerando uma janela deslizante de 1 ano.
+ */
 @ApplicationScoped
 public class AwardIntervalServiceImpl implements AwardIntervalService {
 
