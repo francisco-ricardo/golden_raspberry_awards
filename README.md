@@ -43,30 +43,30 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 - (Opcional) Java 21+ e Maven, caso queira rodar localmente sem container
 
 ### Subir o container com Docker Compose
-1. Clone o repositório:
+1. Clonar o repositório:
    ```bash
    git clone git@github.com:francisco-ricardo/golden_raspberry_awards.git
    cd golden_raspberry_awards
    ```
-2. Suba o ambiente de desenvolvimento:
+2. Subir o ambiente de desenvolvimento:
    ```bash
    make up
    # ou diretamente
    docker-compose -f docker-compose-dev.yaml up --build -d
    ```
-3. Para parar e remover o container:
+3. Parar e remover o container:
    ```bash
    make down
    ```
 
 ### Executando em modo Dev (Quarkus)
-1. Acesse o container:
+1. Executar o comando maven:
    ```bash
    make run
    # ou
    docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw quarkus:dev"
    ```
-2. Acesse a aplicação em: [http://localhost:8080](http://localhost:8080)
+2. Acessar a aplicação em: [http://localhost:8080](http://localhost:8080)
 
 ## Testes de Integração
 Os testes automatizados garantem a qualidade e o correto funcionamento da API.
@@ -129,4 +129,3 @@ Desenvolvido por Francisco Ricardo Taborda Aguiar.
 - Github: [https://github.com/francisco-ricardo](https://github.com)
 
 ---
-
