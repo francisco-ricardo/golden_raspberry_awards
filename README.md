@@ -1,4 +1,4 @@
-# Golden Raspberry Awards (Desafio Técnico)
+# Golden Raspberry Awards
 
 Este repositório implementa uma API RESTful para consulta e manipulação dos dados do Golden Raspberry Awards.
 
@@ -45,8 +45,8 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 ### Rodando com Docker Compose
 1. Clone o repositório:
    ```bash
-   git clone <url-do-repositorio>
-   cd <diretorio-do-projeto>
+   git clone git@github.com:francisco-ricardo/golden_raspberry_awards.git
+   cd golden_raspberry_awards
    ```
 2. Suba o ambiente de desenvolvimento:
    ```bash
@@ -97,24 +97,40 @@ Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 ├── gra/
 │   ├── mvnw, pom.xml
 │   ├── src/
-│   │   ├── main/java/com/gra/api/...
-│   │   ├── main/resources/
-│   │   └── test/java/com/gra/api/...
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/gra/
+│   │   │   │       ├── api/           # Camada de apresentação (controllers/resources REST)
+│   │   │   │       ├── domain/        # Camada de domínio (modelos, repositórios, serviços de domínio)
+│   │   │   │       │   ├── model/     # Entidades e value objects
+│   │   │   │       │   ├── repository # Interfaces de repositório
+│   │   │   │       │   └── service/   # Interfaces e implementações de regras de negócio
+│   │   │   │       ├── infrastructure/# Implementações técnicas (repositórios, startup, CSV parser)
+│   │   │   │       │   ├── repository/
+│   │   │   │       │   ├── csv/
+│   │   │   │       │   └── startup/
+│   │   │   │       └── application/   # (Opcional) Serviços de aplicação/orquestração
+│   │   │   ├── resources/             # Configurações, scripts SQL, arquivos de dados
+│   │   │   │   ├── application.properties
+│   │   │   │   ├── import.sql
+│   │   │   │   └── data/
+│   │   │   │       └── movielist.csv
+│   │   └── test/
+│   │       └── java/com/gra/api/      # Testes automatizados (REST, integração)
 │   └── ...
-└── .devcontainer/test/ (scripts de teste)
+├── .devcontainer/                     # Arquivos e scripts para o ambiente de testes
+│   └── test/                          # Scripts de teste para endpoints
+└── ...
 ```
-
-## Contribuição
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
 
 ## Licença
 Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Contato
 Desenvolvido por [Seu Nome].
-- Email: seu.email@exemplo.com
-- LinkedIn: [Seu LinkedIn](https://www.linkedin.com/)
+- Email: franciscoricardo.dev@gmail.com
+- LinkedIn: [https://www.linkedin.com/in/francisco-ricardo-taborda-aguiar-3ab650a0/](https://www.linkedin.com/)
+- Github: [https://github.com/francisco-ricardo]
 
 ---
 
-> Este projeto foi desenvolvido como parte de um desafio técnico. Obrigado pela oportunidade de avaliação!
