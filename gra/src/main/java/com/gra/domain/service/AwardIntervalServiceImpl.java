@@ -44,9 +44,18 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
     }
 
 
-
     /**
-    0       1       2       3                         0     1       2       3
+     * Calcula os intervalos de premios entre os anos em que os produtores ganharam.
+     * O metodo percorre todos os produtores e seus anos de premiacao,
+     * calcula os intervalos entre os anos de premiacao
+     * e retorna um mapa com os intervalos minimos e maximos.
+     * 
+     * @return um mapa com os intervalos minimos e maximos, onde a chave "min"
+     *         corresponde aos intervalos minimos e a chave "max" corresponde aos intervalos maximos.
+     *         Se nao houver intervalos, o mapa retornara vazio.
+     * 
+     * Exemplo de calculo de intervalos:    
+     * 
     1900    1999    2008    2009                      2000  2018    2019    2099
     l       r                                         l     r
             l       r                                       l       r
@@ -66,29 +75,48 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
     previous: 2008                                   previous: 2019 
     following: 2009                                  following: 2099
     interval: 1                                      interval: 80
-
+     *    
+     * 
+     *         Exemplo de retorno:
+     *         {
+     *             "min": [
+     *                 { "producer": "Producer 1", "interval": 1, "previousWin": 2008, "followingWin": 2009 },
+     *                 { "producer": "Producer 2", "interval": 1, "previousWin": 2018, "followingWin": 2019 }
+     *             ],
+     *             "max": [
+     *                 { "producer": "Producer 1", "interval": 99, "previousWin": 1900, "followingWin": 1999 }     
+     *             ]
+     *         }
+     * 
     */
     private Map<String, List<AwardInterval>> calculateIntervals() {
 
+        LOG.info("Calculando os intervalos das premiacoes...");
         
-        
+        final int slidingWindow = 1; // Define o tamanho da janela deslizante (1 ano)
+
+        // Obtem todos os produtores e os anos em que ganharam premios
         final Map<String, List<Integer>> producerWins = awardRepository.findAllProducerWins();
-        final int slidingWindow = 1;
 
+        // Ordena os anos de cada premiacao para poder calcular os intervalos corretamente
+        for (List<Integer> years : producerWins.values()) {
+            Collections.sort(years);
+        }
+        
         final List<AwardInterval> awardIntervalTemp= new ArrayList<>();
-
         for (Map.Entry<String, List<Integer>> entry : producerWins.entrySet()) {
             final String producer = entry.getKey();
             final List<Integer> years = entry.getValue();
 
-            LOG.infof("Checking - Producer: %s, Years: %s", producer, years);
-
-
             if (years.size() < slidingWindow + 1) {
-                LOG.infof("Producer %s has less than %d wins, skipping.", producer, slidingWindow + 1);
+                LOG.infof("Produtor %s tem menos do que %d premiacoes...", producer, slidingWindow + 1);
                 continue;
             }
 
+            // Calcula os intervalos entre os anos de premiacao
+            // A janela deslizante permite calcular os intervalos entre os anos de premiacao
+            // Os anos devem estar ordenados para que os intervalos sejam calculados corretamente
+            // Exemplo: se os anos forem [2000, 2005, 2010], os intervalos serao [5, 5]            
             for (int i = 0; i < years.size() - slidingWindow; i++) {
                 final int interval = years.get(i + slidingWindow) - years.get(i);
                 final int previousWin = years.get(i);
@@ -97,133 +125,70 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
             }
         }
 
-        for (AwardInterval ai : awardIntervalTemp) {
-            LOG.infof("[UNSORTED] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-        }
-
-        // Sort intervals by interval
+        // Ordena os intervalos para a identificacao dos minimos e maximos
         Collections.sort(awardIntervalTemp, (a1, a2) -> Integer.compare(a1.getInterval(), a2.getInterval()));        
 
-        for (AwardInterval ai : awardIntervalTemp) {
-            LOG.infof("[SORTED] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-                    ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-        }
+        final Map<String, List<AwardInterval>> result = new HashMap<>(); // Map para armazenar os resultados
+        final List<AwardInterval> awardMinIntervals = new ArrayList<>(); // List para armazenar os intervalos minimos
+        final List<AwardInterval> awardMaxIntervals = new ArrayList<>(); // List para armazenar os intervalos maximos
 
-        final Map<String, List<AwardInterval>> result = new HashMap<>();
-        final List<AwardInterval> awardMinIntervals = new ArrayList<>();
-        final List<AwardInterval> awardMaxIntervals = new ArrayList<>();
-        // TODO: VALIDATE EMPTY LIST
-        if (awardIntervalTemp.isEmpty()) {
-            LOG.warn("No award intervals found.");
+        // Verifica se existem intervalos de premios
+        if (awardIntervalTemp == null || awardIntervalTemp.isEmpty()) {
+            LOG.warn("Nao foram encontrados intervaloes de premiacoes.");
             return result;
-        }
-        
+        }        
 
-        // SE HOUVER SOMENTE UM INTERVALO, ELE É O MÍNIMO E MÁXIMO
+        // Se houver somente um intervalo, ele sera considerado o minimo e o maximo        
+        // Se houver mais de um intervalo, encontra o minimo e o maximo
 
-        // Find the minimum AwardInterval
-        if (awardIntervalTemp.size() == 1) {
-            awardMinIntervals.add(awardIntervalTemp.get(0)); // Add the first interval    
-        } else {
-            // Add the first interval
+        // Encontra o minimo AwardInterval
+
+        // Somente 1 intervalo
+        if (awardIntervalTemp.size() == 1) {            
             awardMinIntervals.add(awardIntervalTemp.get(0));
-            // Make sure to add the all intervals that are equal to the first one
+        } 
+        // Mais de 1 intervalo
+        else {
+            awardMinIntervals.add(awardIntervalTemp.get(0)); // Adiciona o menor intervalo
+
+            // Adiciona todos os intervalos que sao iguais ao primeiro
             for (int i = 1; i < awardIntervalTemp.size(); i++) {
                 if (awardIntervalTemp.get(i).getInterval() == awardIntervalTemp.get(0).getInterval()) {
                     awardMinIntervals.add(awardIntervalTemp.get(i));
                 } else {
-                    break; // Stop when we find a different interval
+                    break; // Para quando encontrar um intervalo diferente
                 }
             }
         }
 
-        // Find the maximum AwardInterval
+        // Encontra o maximo AwardInterval
         final int lastIndex = awardIntervalTemp.size() - 1;
+        // Somente 1 intervalo
         if (awardIntervalTemp.size() == 1) {
-            awardMaxIntervals.add(awardIntervalTemp.get(lastIndex)); // Add the last interval    
-        } else {
-            // Add the first interval
             awardMaxIntervals.add(awardIntervalTemp.get(lastIndex));
-            // Make sure to add the all intervals that are equal to the last one
+        } 
+        // Mais de 1 intervalo
+        else {
+            awardMaxIntervals.add(awardIntervalTemp.get(lastIndex)); // Adiciona o maior intervalo
+
+            // Adiciona todos os intervalos que sao iguais ao primeiro
             for (int i = lastIndex - 1; i >= 0; i--) {
                 if (awardIntervalTemp.get(i).getInterval() == awardIntervalTemp.get(lastIndex).getInterval()) {
                     awardMaxIntervals.add(awardIntervalTemp.get(i));
                 } else {
-                    break; // Stop when we find a different interval
+                    break; // Para quando encontrar um intervalo diferente
                 }
             }
         }
 
-        
-        // for (AwardInterval ai : awardMinIntervals) {
-        //     LOG.infof("[MIN] Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-        //             ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-        // }
-
-
         result.put("min", awardMinIntervals);
-        // for (Map.Entry<String, List<AwardInterval>> entry: result.entrySet()) {
-        //     final String key = entry.getKey();
-        //     final List<AwardInterval> values = entry.getValue();
-        //     for (AwardInterval ai: values) {
-        //         LOG.infof("Type: %s, Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-        //             key, ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-        //     }
-            
-        // }
-
         result.put("max", awardMaxIntervals);
-
-        LOG.info("Testing new method");
-
-        for (Map.Entry<String, List<AwardInterval>> entry: result.entrySet()) {
-            final String key = entry.getKey();
-            final List<AwardInterval> values = entry.getValue();
-            for (AwardInterval ai: values) {
-                LOG.infof("Type: %s, Producer: %s, Interval: %d, Previous Win: %d, Following Win: %d", 
-                    key, ai.getProducer(), ai.getInterval(), ai.getPreviousWin(), ai.getFollowingWin());
-            }
-            
-        }
-
         return result;
 
     }
 
 
-
-
-    private Map<String, List<AwardInterval>> calculateIntervalsOrig() {
-        
-        List<AwardInterval> allIntervals = new ArrayList<>();
-        Map<String, List<Integer>> producerWins = awardRepository.findAllProducerWins();
-
-        for (Map.Entry<String, List<Integer>> entry : producerWins.entrySet()) {
-            List<Integer> years = entry.getValue();
-            Collections.sort(years);
-            for (int i = 1; i < years.size(); i++) {
-                int interval = years.get(i) - years.get(i - 1);
-                allIntervals.add(new AwardInterval(entry.getKey(), interval, years.get(i - 1), years.get(i)));
-            }
-        }
-
-        // Find global min and max among consecutive intervals
-        int min = allIntervals.stream().mapToInt(AwardInterval::getInterval).min().orElse(Integer.MAX_VALUE);
-        int max = allIntervals.stream().mapToInt(AwardInterval::getInterval).max().orElse(Integer.MIN_VALUE);
-
-        List<AwardInterval> minList = new ArrayList<>();
-        List<AwardInterval> maxList = new ArrayList<>();
-        for (AwardInterval ai : allIntervals) {
-            if (ai.getInterval() == min) minList.add(ai);
-            if (ai.getInterval() == max) maxList.add(ai);
-        }
-
-        Map<String, List<AwardInterval>> result = new HashMap<>();
-        result.put("min", minList);
-        result.put("max", maxList);
-        return result;
-    }
+    
 }
 
 

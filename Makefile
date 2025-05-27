@@ -1,66 +1,56 @@
-# Makefile for FactoryDash Project
+# Makefile para o projeto Golden Raspberry Awards
 #
-# This Makefile provides a streamlined interface for managing the FactoryDash project's
-# development environment using Docker Compose. It defines common tasks for starting,
-# stopping, and interacting with the application and its services.
+# Este Makefile fornece uma interface simplificada para gerenciar o ambiente de desenvolvimento
+# utilizando Docker Compose. 
+# Ele define tarefas comuns para iniciar, parar e interagir com a aplicacao e seus servicos.
 #
-# Usage:
-#   To execute a target, run: `make <target>`
-#   For example: `make up` or `make help`
+# Uso:
+#   Para executar um target, utilize: `make <target>`
+#   Exemplo: `make up` ou `make help`
 #
-# Dependencies:
+# Dependencias:
 #   - Docker
 #   - Docker Compose
-#   - egrep (for the 'help' target)
+#   - egrep (para o target 'help')
 #
-# Note:
-#   This Makefile is designed for development purposes and utilizes the
-#   'docker-compose-dev.yaml' configuration file.
-
 
 .PHONY: up down run stop help
 
 
-# Target: up - Starts the FactoryDash development environment using Docker Compose.
-# Builds images if necessary and runs containers in detached mode.
+# Target: up - Inicia o ambiente de desenvolvimento usando Docker Compose.
+# Faz o build das imagens se necessário e executa os containers.
 #
-# Usage: make up
+# Uso: make up
 up:
 	docker-compose -f docker-compose-dev.yaml up --build -d
 
 
-# Target: down - Stops and removes all containers associated with the FactoryDash development environment. 
-# This includes the main application, Celery worker, Celery beat, Redis, and Postgres containers.
-# The `|| true` ensures that the command doesn't fail if a container doesn't exist.
+# Target: down - Para e remove todos os containers associados ao ambiente de desenvolvimento.
+# O `|| true` garante que o comando não falhe caso o container não exista.
 #
-# Usage: make down
+# Uso: make down
 down:
 	docker rm -f gra.dev || true
 
 
-# Target: run - Executes the 'supervisord' process within the 'factorydash.dev' container. 
-# This is typically used to start and manage the application's processes within the container.
-# It uses the supervisord configuration file located at 
-# '/factorydash/.devcontainer/supervisord.dev.conf'.
+# Target: run - Executa o processo principal de desenvolvimento dentro do container 'gra.dev'.
+# Inicia o Quarkus em modo dev no diretório /app/gra.
 #
-# Usage: make run
+# Uso: make run
 run:
 	docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw quarkus:dev"
 
 
-# Target: stop - Stops the 'supervisord' process within the 'factorydash.dev' container. 
-# This effectively stops all processes managed by supervisord within the container.
+# Target: stop - Encerra o processo principal de desenvolvimento dentro do container 'gra.dev'.
 #
-# Usage: make stop
+# Uso: make stop
 stop:
 	docker exec -it gra.dev pkill -SIGINT -f "org.apache.maven.wrapper.MavenWrapperMain quarkus:dev"
 
 
-# Target: help - Displays a list of available targets defined in this Makefile.
-# It parses the Makefile and extracts lines that start with
-# "# Target:" to provide a concise overview of available commands.
+# Target: help - Exibe uma lista dos targets disponiveis definidos neste Makefile.
 #
-# Usage: make help
+# Uso: make help
 help:
 	@egrep "^# Target:" [Mm]akefile
 
