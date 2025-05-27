@@ -42,7 +42,7 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 - [Docker Compose](https://docs.docker.com/compose/)
 - (Opcional) Java 21+ e Maven, caso queira rodar localmente sem container
 
-### Rodando com Docker Compose
+### Subir o container com Docker Compose
 1. Clone o repositório:
    ```bash
    git clone git@github.com:francisco-ricardo/golden_raspberry_awards.git
@@ -60,8 +60,6 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
    ```
 
 ### Executando em modo Dev (Quarkus)
-Se preferir rodar o Quarkus em modo desenvolvimento:
-
 1. Acesse o container:
    ```bash
    make run
@@ -73,11 +71,11 @@ Se preferir rodar o Quarkus em modo desenvolvimento:
 ## Testes de Integração
 Os testes automatizados garantem a qualidade e o correto funcionamento da API.
 
-### Executando os testes via Maven
-Dentro do container ou localmente (com Java 21+):
-```bash
-cd gra
-./mvnw test
+### Executando os testes
+```
+make test
+# ou
+docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw test" 
 ```
 
 ### Testando os endpoints manualmente

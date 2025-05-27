@@ -14,7 +14,7 @@
 #   - egrep (para o target 'help')
 #
 
-.PHONY: up down run stop help
+.PHONY: up down run stop test help
 
 
 # Target: up - Inicia o ambiente de desenvolvimento usando Docker Compose.
@@ -39,6 +39,13 @@ down:
 # Uso: make run
 run:
 	docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw quarkus:dev"
+
+
+# Target: test- Executa os testes de integracao.
+#
+# Uso: make test
+test:
+	docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw test"
 
 
 # Target: stop - Encerra o processo principal de desenvolvimento dentro do container 'gra.dev'.
