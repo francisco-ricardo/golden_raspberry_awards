@@ -186,8 +186,6 @@ public class AwardIntervalServiceImpl implements AwardIntervalService {
         return result;
 
     }
-
-
     
 }
 

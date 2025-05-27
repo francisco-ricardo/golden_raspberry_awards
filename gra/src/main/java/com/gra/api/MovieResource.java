@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * RESTful API para gerenciar filmes.
+ * Resource para gerenciar filmes.
  * Fornece endpoints para listar, criar, modificar e deletar filmes.
  */
 @Path("/movies")

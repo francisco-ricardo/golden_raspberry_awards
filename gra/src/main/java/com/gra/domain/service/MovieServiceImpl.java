@@ -9,6 +9,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+/**
+ * Implementacao do servico de gerenciamento de filmes.
+ * Fornece metodos para listar, criar, atualizar e deletar filmes,
+ * bem como buscar filmes vencedores.
+ */
 @ApplicationScoped
 public class MovieServiceImpl implements MovieService {
 

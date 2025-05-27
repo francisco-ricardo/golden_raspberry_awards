@@ -11,6 +11,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+
+/**
+ * Resource para gerenciar filmes vencedores.
+ * Fornece um endpoint para listar todos os filmes que ganharam o premio.
+ */
 @Path("/movies/winners")
 public class MovieWinnerResource {
 

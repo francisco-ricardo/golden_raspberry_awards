@@ -3,6 +3,10 @@ package com.gra.api.dto;
 import com.gra.domain.model.AwardInterval;
 import java.util.List;
 
+/**
+ * DTO para representar os intervalos de premiacao.
+ * Contem listas de intervalos mInimos e mAximos.
+ */
 public class AwardIntervalResponse {
     private List<AwardInterval> min;
     private List<AwardInterval> max;

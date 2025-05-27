@@ -8,10 +8,15 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+/**
+ * Resource para gerenciar os intervalos de premiacao.
+ * Fornece endpoints para obter os intervalos minimos e maximos de premiacao.
+ */
 @Path("/awards")
 public class AwardResource {
 
     private final AwardIntervalService awardIntervalService;
+    
 
     @Inject
     public AwardResource(AwardIntervalService awardIntervalService) {

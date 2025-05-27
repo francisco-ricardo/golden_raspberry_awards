@@ -2,6 +2,12 @@ package com.gra.domain.model;
 
 import jakarta.persistence.*;
 
+
+/**
+ * Representa um filme no banco de dados.
+ * Contem informacoes sobre o titulo, ano de lancamento, estudios,
+ * produtores e se o filme ganhou o premio.
+ */
 @Entity
 @Table(name = "movies")
 public class Movie {

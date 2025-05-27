@@ -8,6 +8,11 @@ import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * Checka a conectividade com o banco de dados e executa uma consulta simples.
+ * Verifica se a conexão está ativa e se é possível realizar consultas.
+ */
 @QuarkusTest
 public class DatabaseConnectivityTest {
 

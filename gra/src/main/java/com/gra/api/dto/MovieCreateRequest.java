@@ -1,5 +1,10 @@
 package com.gra.api.dto;
 
+
+/**
+ * DTO para criar um novo filme.
+ * Contem os campos necessarios para a criacao de um filme.
+ */
 public class MovieCreateRequest {
     public String title;
     public int year;

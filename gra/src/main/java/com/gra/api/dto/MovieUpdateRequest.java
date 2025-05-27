@@ -1,5 +1,9 @@
 package com.gra.api.dto;
 
+/**
+ * DTO para atualizar um filme existente.
+ * Contem os campos necessarios para a atualizacao de um filme. 
+ */
 public class MovieUpdateRequest {
     
     public String title;

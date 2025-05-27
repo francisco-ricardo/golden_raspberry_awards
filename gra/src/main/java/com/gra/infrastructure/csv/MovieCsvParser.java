@@ -13,6 +13,14 @@ import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
 
+
+/**
+ * Processa um arquivo CSV contendo informacoes sobre filmes.
+ * O arquivo deve conter os campos: title, year, producers, studios, winner.
+ * O delimitador utilizado e o ponto e vírgula (;).
+ * O cabecalho e ignorado e as linhas vazias sao descartadas.
+ * Exemplo de linha: "The Godfather";1972;"Francis Ford Coppola, Mario Puzo";"Paramount Pictures";"yes"
+ */
 @ApplicationScoped
 public class MovieCsvParser {
 

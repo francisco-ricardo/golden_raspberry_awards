@@ -9,6 +9,12 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementacao do repositorio de filmes utilizando Panache.
+ * Fornece metodos para buscar, listar, salvar e deletar filmes.
+ * 
+ */
 @ApplicationScoped
 public class MovieRepositoryImpl implements MovieRepository, PanacheRepository<Movie> {
 
