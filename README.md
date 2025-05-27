@@ -3,6 +3,7 @@
 Este repositório implementa uma API RESTful para consulta e manipulação dos dados do Golden Raspberry Awards.
 
 ## Índice
+
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
@@ -19,15 +20,18 @@ Este repositório implementa uma API RESTful para consulta e manipulação dos d
 ---
 
 ## Sobre o Projeto
+
 Este projeto expõe endpoints REST para consulta, criação, atualização e remoção de filmes indicados ao prêmio Golden Raspberry Awards, além de endpoints para análise de intervalos entre prêmios de produtores vencedores. O objetivo é demonstrar domínio em Java, Quarkus, boas práticas de API, testes e conteinerização.
 
 ## Funcionalidades
+
 - Listagem de filmes e vencedores
 - Cadastro, atualização e remoção de filmes
 - Consulta de intervalos entre prêmios de produtores
 - Testes automatizados de integração
 
 ## Tecnologias Utilizadas
+
 - Java 21
 - Quarkus 3.x
 - Maven
@@ -38,11 +42,13 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 ## Como Executar
 
 ### Pré-requisitos
+
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - (Opcional) Java 21+ e Maven, caso queira rodar localmente sem container
 
 ### Subir o container com Docker Compose
+
 1. Clonar o repositório:
    ```bash
    git clone git@github.com:francisco-ricardo/golden_raspberry_awards.git
@@ -60,6 +66,7 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
    ```
 
 ### Executando em modo Dev (Quarkus)
+
 1. Executar o comando maven:
    ```bash
    make run
@@ -69,9 +76,11 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 2. Acessar a aplicação em: [http://localhost:8080](http://localhost:8080)
 
 ## Testes de Integração
+
 Os testes automatizados garantem a qualidade e o correto funcionamento da API.
 
 ### Executando os testes
+
 ```
 make test
 # ou
@@ -79,6 +88,7 @@ docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw test"
 ```
 
 ### Testando os endpoints manualmente
+
 Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 - Criar filme: `bash .devcontainer/test/create_movie.sh`
 - Buscar filme por ID: `bash .devcontainer/test/get_movie_by_id.sh <id>`
@@ -86,6 +96,7 @@ Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 - Deletar filme: `bash .devcontainer/test/delete_movie_by_id.sh <id>`
 
 ## Estrutura do Projeto
+
 ```
 /app
 ├── Makefile
@@ -119,10 +130,27 @@ Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 └── ...
 ```
 
+## Considerações
+
+As seguintes premissas foram assumidas:
+
+- Os cálculos devem considerar apenas premiações consecutivas, desconsiderando premiações não contíguas.
+
+- Se houver somente um Produtor que tenha conquistado mais de uma premiação, ele fará parte tanto do grupo *min* 
+quanto do grupo *max*.
+
+- O campo *producers* foi considerado do tipo *String* e não uma lista. Portanto, um mesmo Produtor pode aparecer em diferentes composições com outros produtores e não ser contabilizado como ganhador consecutivo.
+
+- O campo *winner* do modelo *Movie* será definido como *true* sempre que o seu respectivo valor no arquivo CSV for *yes* (case insensitive). Para os demais casos, será considerado como *false*.
+
+- A configuração foi limitada ao profile dev, sem considerar aspectos como cobertura de testes, deploy para a nuvem e pipelines CI/CD.
+
 ## Licença
+
 Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Contato
+
 Desenvolvido por Francisco Ricardo Taborda Aguiar.
 - Email: franciscoricardo.dev@gmail.com
 - LinkedIn: [https://www.linkedin.com/in/francisco-ricardo-taborda-aguiar-3ab650a0/](https://www.linkedin.com/)
