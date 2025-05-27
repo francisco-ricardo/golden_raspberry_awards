@@ -54,9 +54,7 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
    # ou diretamente
    docker-compose -f docker-compose-dev.yaml up --build -d
    ```
-3. Acesse a aplicação em: [http://localhost:8080](http://localhost:8080)
-
-4. Para parar e remover o container:
+3. Para parar e remover o container:
    ```bash
    make down
    ```
@@ -70,7 +68,7 @@ Se preferir rodar o Quarkus em modo desenvolvimento:
    # ou
    docker exec -it gra.dev sh -c "cd /app/gra && ./mvnw quarkus:dev"
    ```
-2. O hot reload estará disponível em [http://localhost:8080](http://localhost:8080)
+2. Acesse a aplicação em: [http://localhost:8080](http://localhost:8080)
 
 ## Testes de Integração
 Os testes automatizados garantem a qualidade e o correto funcionamento da API.
