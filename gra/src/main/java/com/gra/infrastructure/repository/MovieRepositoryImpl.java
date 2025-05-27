@@ -14,7 +14,7 @@ public class MovieRepositoryImpl implements MovieRepository, PanacheRepository<M
 
     @Override
     public Optional<Movie> findByIdOptional(Long id) {
-        return PanacheRepository.super.findByIdOptional(id);
+        return find("id", id).firstResultOptional();
     }
 
     @Override
@@ -32,5 +32,16 @@ public class MovieRepositoryImpl implements MovieRepository, PanacheRepository<M
     public void save(Movie movie) {
         persist(movie);
     }
+
+    @Override
+    @Transactional
+    public boolean deleteById(Long id) {
+        Movie movie = findById(id);
+        if (movie != null) {
+            delete(movie);
+        }
+        return movie != null;
+    }
+
 
 }

@@ -17,7 +17,7 @@ cd gra
 
 ```
 
-## Premissas
+## Considerações
 
 As seguintes premissas foram assumidas:
 
@@ -34,6 +34,7 @@ produtores e não ser contabilizado como sendo ganhador consecutivo.
 - O campo `winner` do model `Movie` será definido como `true`, sempre que o seu respectivo valor no 
 arquivo CSV for `yes` (case insensitive). Para os demais casos, será considerado como `false`.
 
-
+- Foi criado somente o profile *dev*, não considerando cobertura de testes, deploy para a nuvem, pipelines CI/CD, 
+entre outros aspectos.
 
 

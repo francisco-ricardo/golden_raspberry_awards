@@ -25,6 +25,7 @@ public class Movie {
     @Column(nullable = false)
     private boolean winner;
 
+
     // Constructors
 
     public Movie() {}
@@ -36,6 +37,7 @@ public class Movie {
         this.producers = producers;
         this.winner = winner;
     }
+
 
     // Getters
 
@@ -62,5 +64,33 @@ public class Movie {
     public boolean isWinner() {
         return this.winner;
     }
+
+
+    // Setters
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public void setProducers(String producers) {
+        this.producers = producers;
+    }
+    
+    public void setStudios(String studios) {
+        this.studios = studios;
+    }
+    
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
 
 }

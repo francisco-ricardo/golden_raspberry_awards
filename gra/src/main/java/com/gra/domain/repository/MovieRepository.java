@@ -13,5 +13,7 @@ public interface MovieRepository {
     List<Movie> findAllWinnerMovies();
 
     void save(Movie movie);
+
+    boolean deleteById(Long id);
     
 }
