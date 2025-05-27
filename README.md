@@ -127,10 +127,10 @@ Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Contato
-Desenvolvido por [Seu Nome].
+Desenvolvido por Francisco Ricardo Taborda Aguiar.
 - Email: franciscoricardo.dev@gmail.com
 - LinkedIn: [https://www.linkedin.com/in/francisco-ricardo-taborda-aguiar-3ab650a0/](https://www.linkedin.com/)
-- Github: [https://github.com/francisco-ricardo]
+- Github: [https://github.com/francisco-ricardo](https://github.com)
 
 ---
 
