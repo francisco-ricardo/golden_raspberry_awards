@@ -69,7 +69,7 @@ A API foi desenvolvida seguindo o nível 2 do Modelo de Maturidade de Richardson
 
 - **Intervalos de prêmios de produtores**
 
-  - `GET /awards/intervals`
+  - `GET /awards`
   - Retorna os produtores com os maiores e menores intervalos entre prêmios consecutivos.
 
 #### Observação
@@ -179,6 +179,8 @@ Scripts de exemplo estão disponíveis em `.devcontainer/test/`:
 ## Considerações
 
 As seguintes premissas foram assumidas:
+
+- A lista dos produtores com maior e menor intervalo de premiação, conforme descrito na página 2 do documento, pode ser obtida pelo endpoint `/awards`.
 
 - Os cálculos devem considerar apenas premiações consecutivas, desconsiderando premiações não contíguas.
 
