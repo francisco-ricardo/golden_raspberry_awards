@@ -6,6 +6,7 @@ Este repositório implementa uma API RESTful para consulta e manipulação dos d
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
+- [Documentação da API](#documentação-da-api)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Como Executar](#como-executar)
   - [Pré-requisitos](#pré-requisitos)
@@ -29,6 +30,51 @@ Este projeto expõe endpoints REST para consulta, criação, atualização e rem
 - Cadastro, atualização e remoção de filmes
 - Consulta de intervalos entre prêmios de produtores
 - Testes automatizados de integração
+
+## Documentação da API
+
+A API foi desenvolvida seguindo o nível 2 do Modelo de Maturidade de Richardson, utilizando recursos, verbos HTTP e códigos de status apropriados para cada operação.
+
+### Endpoints Principais
+
+- **Listar filmes**
+
+  - `GET /movies`
+  - Retorna a lista de todos os filmes cadastrados.
+
+- **Buscar filme por ID**
+
+  - `GET /movies/{id}`
+  - Retorna os detalhes de um filme específico.
+
+- **Criar filme**
+
+  - `POST /movies`
+  - Cadastra um novo filme. Requer um corpo JSON com os dados do filme.
+
+- **Atualizar filme**
+
+  - `PUT /movies/{id}`
+  - Atualiza os dados de um filme existente.
+
+- **Deletar filme**
+
+  - `DELETE /movies/{id}`
+  - Remove um filme do sistema.
+
+- **Listar vencedores**
+
+  - `GET /movies/winners`
+  - Retorna todos os filmes vencedores do prêmio.
+
+- **Intervalos de prêmios de produtores**
+
+  - `GET /awards/intervals`
+  - Retorna os produtores com os maiores e menores intervalos entre prêmios consecutivos.
+
+#### Observação
+
+- Todos os endpoints retornam respostas em formato JSON.
 
 ## Tecnologias Utilizadas
 
